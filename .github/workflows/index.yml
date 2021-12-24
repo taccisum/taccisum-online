@@ -8,4 +8,5 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '8'
-      - run: mvn clean verify -U
+      - run: ls -a
+      - run: mvn clean verify -U --file pom.xml
