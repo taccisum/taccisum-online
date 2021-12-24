@@ -1,0 +1,11 @@
+name: CI/CD Workflows
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v2.5.0
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - run: java -version
