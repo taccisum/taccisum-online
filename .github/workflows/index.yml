@@ -8,4 +8,4 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '8'
-      - run: java -version
+      - run: mvn clean verify -U
