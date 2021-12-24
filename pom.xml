@@ -13,6 +13,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- optional start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- optional end-->
     </dependencies>
 
     <dependencyManagement>
@@ -46,5 +54,19 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**.*</include>
+                    <include>**/**.*</include>
+                </includes>
+                <!-- 替换 @变量@ -->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
 </project>
