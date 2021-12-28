@@ -1,18 +1,15 @@
 name: CD-Run Workflow
 on:
-  push:
-    branches:
-      - develop
-#  workflow_run:
-#    workflows:
-#      - CD Workflow
-#    types:
-#      - completed
+  workflow_run:
+    workflows:
+      - cd
+    types:
+      - completed
 
 jobs:
   on-success:
     runs-on: ubuntu-latest
-#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Connecting to AliCloud and run latest image.
         uses: appleboy/ssh-action@master
