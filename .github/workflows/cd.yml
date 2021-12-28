@@ -47,4 +47,6 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online:${{ steps.get_version.outputs.VERSION }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online:${{ steps.get_version.outputs.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online:latest
