@@ -21,9 +21,11 @@ jobs:
           username: ${{ secrets.ECS_USERNAME }}
           key: ${{ secrets.ECS_PRIVATE_KEY }}
           script: |
+            docker rm -f taccisum-online
             docker run \
             -p 8080:8080 \
             -d \
+            --name taccisum-online \
             taccisum/taccisum-online
   on-failure:
     runs-on: ubuntu-latest
