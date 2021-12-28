@@ -1,8 +1,8 @@
 name: CD Workflow
 on:
   push:
-    branches:
-      - master
+    tags:
+      - v*
 
 jobs:
   publish-dockerhub:
