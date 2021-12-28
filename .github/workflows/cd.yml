@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Extract Version
+        id: get_version
+        run: |
+          echo "::set-output name=VERSION::$(echo 'refs/tags/v0.1.7' | sed 's/refs\/tags\/v//')\n"
+      - run: echo ${{ steps.get_version.outputs.VERSION }}
 
       - uses: actions/setup-java@v2.5.0
         with:
@@ -42,4 +47,4 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online:${{ steps.get_version.outputs.VERSION }}
