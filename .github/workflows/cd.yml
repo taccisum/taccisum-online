@@ -1,3 +1,8 @@
+# 说明：仅在监测到 'v*' 开头的 tags 推送时触发
+# 将自动将该 tags 对应的代码构建成 docker 镜像并推送至 docker hub，期间会以代码 tags 去掉前缀的 v 后作为
+# 镜像的 tag 区分，如代码 tag v0.1.0，则生成的镜像 tag 为 repo/taccisum-online:0.1.0
+# 此外还会同步更新 latest 镜像为当前 tag
+
 name: CD Workflow
 on:
   push:
