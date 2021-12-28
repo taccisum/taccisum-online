@@ -1,8 +1,7 @@
 name: CD-Run Workflow
 on:
   workflow_run:
-    workflows:
-      - cd
+    workflows: ['CD Workflow']
     types:
       - completed
 
