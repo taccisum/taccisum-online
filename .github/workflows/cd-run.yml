@@ -1,10 +1,13 @@
 name: CD-Run Workflow
 on:
-  workflow_run:
-    workflows:
-      - CD Workflow
-    types:
-      - completed
+  push:
+    branches:
+      - develop
+#  workflow_run:
+#    workflows:
+#      - CD Workflow
+#    types:
+#      - completed
 
 jobs:
   on-success:
