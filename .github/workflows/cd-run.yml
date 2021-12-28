@@ -17,6 +17,7 @@ jobs:
           username: ${{ secrets.ECS_USERNAME }}
           key: ${{ secrets.ECS_PRIVATE_KEY }}
           script: |
+            docker pull taccisum/taccisum-online
             docker rm -f taccisum-online
             docker run \
             -p 8080:8080 \
