@@ -3,6 +3,7 @@ package com.github.taccisum.ol.controller;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class VersionControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Value("${app.version}")
+    private String version;
 
     @Test
     public void versions() throws Exception {
@@ -30,6 +33,6 @@ public class VersionControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(MockMvcResultMatchers.content().string("1.0-SNAPSHOT"));
+                .andExpect(MockMvcResultMatchers.content().string(version));
     }
 }

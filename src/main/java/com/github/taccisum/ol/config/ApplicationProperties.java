@@ -11,4 +11,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("app")
 public class ApplicationProperties {
     private String version;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }
