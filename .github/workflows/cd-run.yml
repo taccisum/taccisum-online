@@ -12,18 +12,26 @@ jobs:
     steps:
       - name: Connecting to AliCloud and run latest image.
         uses: appleboy/ssh-action@master
+        env:
+          HOST_LOG_PATH: /var/local/log/${{ github.repository }}
+          IMAGE_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/taccisum-online
+          CONTAINER_NAME: taccisum-online
+          PORT: 8080
         with:
           host: ${{ secrets.ECS_HOST }}
           username: ${{ secrets.ECS_USERNAME }}
           key: ${{ secrets.ECS_PRIVATE_KEY }}
+          envs: HOST_LOG_PATH, IMAGE_TAG, CONTAINER_NAME, PORT
           script: |
-            docker pull taccisum/taccisum-online
-            docker rm -f taccisum-online
+            mkdir -p $HOST_LOG_PATH
+            docker pull $IMAGE_TAG
+            docker rm -f $CONTAINER_NAME
             docker run \
-            -p 8080:8080 \
+            -p $PORT:8080 \
+            -v $HOST_LOG_PATH:/var/local/log \
             -d \
-            --name taccisum-online \
-            taccisum/taccisum-online
+            --name $CONTAINER_NAME \
+            $IMAGE_TAG
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}

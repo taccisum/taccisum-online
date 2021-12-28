@@ -1,0 +1,3 @@
+logging:
+  file:
+    name: /var/local/log/app.log
