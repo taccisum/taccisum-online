@@ -12,7 +12,7 @@ jobs:
       - name: Extract Version
         id: get_version
         run: |
-          echo "::set-output name=VERSION::$(echo 'refs/tags/v0.1.7' | sed 's/refs\/tags\/v//')"
+          echo "::set-output name=VERSION::$(echo $GITHUB_REF | sed 's/refs\/tags\/v//')"
       - run: echo ${{ steps.get_version.outputs.VERSION }}
 
       - uses: actions/setup-java@v2.5.0
