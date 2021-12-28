@@ -20,7 +20,11 @@ jobs:
           host: ${{ secrets.ECS_HOST }}
           username: ${{ secrets.ECS_USERNAME }}
           key: ${{ secrets.ECS_PRIVATE_KEY }}
-          script: whoami
+          script: |
+            docker run \
+            -p 8080:8080 \
+            -d \
+            taccisum/taccisum-online
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
