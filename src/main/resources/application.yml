@@ -1,2 +1,5 @@
 app:
   version: @project.version@
+
+swagger:
+  base-package: com.github.taccisum.ol.controller
