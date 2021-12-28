@@ -1,0 +1,26 @@
+name: CD-Run Workflow
+on:
+  workflow_run:
+    workflows:
+      - CD Workflow
+    types:
+      - completed
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Connecting to AliCloud and run latest image.
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          key: ${{ ECS_PRIVATE_KEY }}
+          port: ${{ secrets.ECS_PORT }}
+          script: whoami
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'Do nothing beacuse of "CD Workflow" is failure.'
