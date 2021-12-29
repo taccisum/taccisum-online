@@ -42,7 +42,7 @@ jobs:
         run: docker --version
 
       - name: Build Jar Package
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
       - run: ls -la ./target
 
