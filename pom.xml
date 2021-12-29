@@ -18,6 +18,10 @@
             <artifactId>swagger-spring-boot2-starter</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <!-- optional start-->
         <dependency>

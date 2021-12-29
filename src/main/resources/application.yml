@@ -3,3 +3,19 @@ app:
 
 swagger:
   base-package: com.github.taccisum.ol.controller
+
+management:
+  server:
+    port: 18080
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  error:
+    include-stacktrace: always
+    include-exception: true

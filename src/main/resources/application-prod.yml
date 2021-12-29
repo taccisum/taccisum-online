@@ -1,3 +1,20 @@
 logging:
   file:
     name: /var/local/log/app.log
+
+#swagger:
+#  enabled: false    # 关闭 swagger ui
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health, info'   # 只开放非敏感接口
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  error:
+    include-stacktrace: never   # 禁止抛出异常信息
+    include-exception: false
