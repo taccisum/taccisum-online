@@ -8,6 +8,6 @@ package com.github.taccisum.ol.domain.exception;
  */
 public class DataNotFoundException extends DomainException {
     public DataNotFoundException(String key, Object id) {
-        super("%s[%s] 不存在", key, id);
+        super("%s[%s]不存在", key, id);
     }
 }

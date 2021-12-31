@@ -9,8 +9,8 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.github.taccisum.domain.core.Entity;
-import com.github.taccisum.ol.domain.data.AliCloudAccountDO;
+import com.github.taccisum.ol.domain.data.ThirdAccountDO;
+import com.github.taccisum.ol.domain.entity.core.ThirdAccount;
 import com.github.taccisum.ol.domain.exception.DomainException;
 import lombok.Data;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -23,15 +23,11 @@ import java.util.Optional;
  * @author taccisum - liaojinfeng6938@dingtalk.com
  * @since 2021/12/31
  */
-public class AliCloudAccount extends Entity.Base<Long> {
+public class AliCloudAccount extends ThirdAccount {
     private IAcsClient client;
 
     public AliCloudAccount(Long id) {
         super(id);
-    }
-
-    public AliCloudAccountDO data() {
-        throw new NotImplementedException();
     }
 
     /**
@@ -81,10 +77,9 @@ public class AliCloudAccount extends Entity.Base<Long> {
     }
 
     private IAcsClient getClient(AliCloud.Region region) {
-        if (this.client != null) {
-
-            AliCloudAccountDO data = this.data();
-            IClientProfile profile = DefaultProfile.getProfile(region.key(), data.getAccessKeyId(), data.getAccessKeySecret());
+        if (this.client == null) {
+            ThirdAccountDO data = this.data();
+            IClientProfile profile = DefaultProfile.getProfile(region.key(), data.getAppId(), data.getAppSecret());
 
             if (region != AliCloud.Region.HANG_ZHOU) {
                 // TODO::

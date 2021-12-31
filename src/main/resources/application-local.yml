@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: 'jdbc:mysql://rm-wz9g15ih656rg6zvu4o.mysql.rds.aliyuncs.com:3306/taccisum-online-dev?useSSL=false'
+    #    账号密码请通过启动参数设置，避免泄漏
+    #    username:
+    #    password:
+    driver-class-name: com.mysql.jdbc.Driver
+
+debug: true

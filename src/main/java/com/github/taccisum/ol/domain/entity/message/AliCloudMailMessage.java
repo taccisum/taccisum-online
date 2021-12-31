@@ -6,7 +6,6 @@ import com.github.taccisum.ol.domain.entity.sp.AliCloud;
 import com.github.taccisum.ol.domain.entity.sp.AliCloudAccount;
 import com.github.taccisum.ol.domain.exception.DataErrorException;
 import lombok.extern.slf4j.Slf4j;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.rmi.ServerException;
 
@@ -22,17 +21,13 @@ public class AliCloudMailMessage extends MailMessage {
         super(id);
     }
 
-    public MessageDO data() {
-        throw new NotImplementedException();
-    }
-
     @Override
     public boolean deliver() {
         boolean success = false;
         try {
             MessageDO data = this.data();
             this.getServiceProvider()
-                    .getAccount("taccisum-online.mail.send@1520113260150920.onaliyun.com")
+                    .getAccount(data.getSpAccountId())
                     .sendMailVia(
                             data.getSender(),
                             data.getTarget(),
@@ -50,6 +45,7 @@ public class AliCloudMailMessage extends MailMessage {
                 log.error(String.format("消息 %d 发送失败", this.id()), e);
             }
         }
+        this.updateStatus(success ? Status.DELIVERED : Status.FAIL);
         this.publish(new DeliverEvent(success));
         return success;
     }
@@ -60,6 +56,6 @@ public class AliCloudMailMessage extends MailMessage {
         if (sp instanceof AliCloud) {
             return (AliCloud) sp;
         }
-        throw new DataErrorException("Message.ServiceProvider", this.id(), "阿里云邮件消息只能通过阿里云进行发送，当前提供商为 " + sp.getType().name());
+        throw new DataErrorException("AliCloudMailMessage.ServiceProvider", this.id(), "阿里云邮件消息可能关联了错误的服务提供商：" + sp.getType().name() + "，请检查数据是否异常");
     }
 }
