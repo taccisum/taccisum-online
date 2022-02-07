@@ -29,7 +29,9 @@ jobs:
             -v $HOST_LOG_PATH:/var/local/log \
             -d \
             --name $CONTAINER_NAME \
-            $IMAGE_TAG
+            $IMAGE_TAG \
+              --spring.profiles.active=prod \
+              --spring.datasource.password=${{ secrets.MYSQL_PASSWORD }}
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
