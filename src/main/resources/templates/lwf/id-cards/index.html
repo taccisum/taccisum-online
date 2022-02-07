@@ -99,7 +99,19 @@
     </script>
 </head>
 <body>
-<p th:text="'hello ' + ${name} + '.'"></p>
+
+<div style="border: gray; border-style: dotted; border-width: 2px; padding-left: 10px; padding-right: 10px; margin-bottom: 20px;">
+    <p th:text="'Hello ' + ${name} + '.'"></p>
+    <pre>
+使用教程：
+    1. 选择本地身份证正面，上传获取裁剪结果（重复上传会覆盖上次结果）
+    2. 选择本地身份证反面，上传获取裁剪结果（重复上传会覆盖上次结果）
+    3. 点击合成，合并正反面识别结果
+    4. 点击下载，保存合成结果到本地
+
+<div style="color: red; font-weight: bold">注意事项：
+    - 图片识别使用了腾讯云 OCR 服务，每月有免费调用次数限制，用完需等下月更新或付费购买，请节约使用</div></pre>
+</div>
 
 <div>
     <span>选择身份证照片（5M 以下）：</span>
@@ -116,6 +128,7 @@
     <div>
         <span>识别结果：</span>
         <button id="btn-clean-img">清除</button>
+        <br/>
         <img id="cropped-img-front" src="" alt=""/>
         <img id="cropped-img-back" src="" alt=""/>
     </div>

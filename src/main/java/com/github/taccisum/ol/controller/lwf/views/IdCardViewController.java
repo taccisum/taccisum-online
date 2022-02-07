@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IdCardViewController {
     @RequestMapping
     public String index(Model model) {
-        model.addAttribute("name", "liaowenfeng");
+        model.addAttribute("name", "Guest");
         return "lwf/id-cards/index.html";
     }
 }
