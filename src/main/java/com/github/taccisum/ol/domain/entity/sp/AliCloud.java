@@ -65,7 +65,12 @@ public class AliCloud extends Entity.Base<ServiceProvider.Type> implements
         /**
          * 中国杭州
          */
-        HANG_ZHOU("cn-hangzhou");
+        HANG_ZHOU("cn-hangzhou"),
+        /**
+         * 中国上海
+         */
+        SHANG_HAI("cn-shanghai"),
+        ;
 
         @Getter
         @Accessors(fluent = true)
@@ -73,6 +78,18 @@ public class AliCloud extends Entity.Base<ServiceProvider.Type> implements
 
         Region(String key) {
             this.key = key;
+        }
+
+        /**
+         * <pre>
+         * 获取此区域对应的 oss endpoint url
+         *
+         * 示例：
+         * - {@link #HANG_ZHOU} -> https://oss-cn-hangzhou.aliyuncs.com
+         * </pre>
+         */
+        public String getOssEndpoint() {
+            return String.format("https://oss-%s.aliyuncs.com", this.key);
         }
     }
 }

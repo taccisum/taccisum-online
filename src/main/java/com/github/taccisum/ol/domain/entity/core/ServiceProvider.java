@@ -20,5 +20,9 @@ public interface ServiceProvider extends Entity<Type> {
          * 阿里云
          */
         ALI_CLOUD,
+        /**
+         * 腾讯云
+         */
+        TENCENT_CLOUD,
     }
 }

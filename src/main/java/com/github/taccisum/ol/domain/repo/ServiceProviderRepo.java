@@ -30,4 +30,8 @@ public class ServiceProviderRepo {
         }
         return sp;
     }
+
+    public <T> T getAndCast(ServiceProvider.Type id) {
+        return (T) this.get(id);
+    }
 }

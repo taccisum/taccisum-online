@@ -4,6 +4,11 @@ app:
 swagger:
   base-package: com.github.taccisum.ol.controller
 
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+
 management:
   server:
     port: 18080
@@ -19,3 +24,5 @@ server:
   error:
     include-stacktrace: always
     include-exception: true
+  compression:
+    enabled: true

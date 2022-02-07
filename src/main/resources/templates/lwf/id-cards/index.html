@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.min.js"></script>
+    <script>
+        let debug = false
+        $(function () {
+            $('#btn-up-idcard').click(function () {
+                let formData = new FormData();
+                // 获取文件
+                let fileData = $("#file-id-card").prop("files")[0];
+                if (!fileData) {
+                    alert('请先选择文件！')
+                    return
+                }
+                formData.append("file", fileData);
+                let side = $('#slt-side').val()
+                $.ajax({
+                    url: `/apis/lwf/id-cards/crops?fake=${debug}&side=${side}`,
+                    type: 'POST',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (side === 'BOTH') {
+                            $('#cropped-img-front').attr('src', 'data:image/jpeg;base64,' + data[0])
+                            $('#cropped-img-back').attr('src', 'data:image/jpeg;base64,' + data[1])
+                        } else {
+                            if (side === 'FRONT') {
+                                $('#cropped-img-front').attr('src', 'data:image/jpeg;base64,' + data[0])
+                            } else if (side === 'BACK') {
+                                $('#cropped-img-back').attr('src', 'data:image/jpeg;base64,' + data[0])
+                            }
+                        }
+                    },
+                    error(xhr, status, err) {
+                        alert(`[${xhr.status}]裁剪失败，${xhr.responseJSON.message}`)
+                    }
+                });
+            })
+
+            $('#btn-clean-img').click(function () {
+                $('#cropped-img-front').attr('src', '')
+                $('#cropped-img-back').attr('src', '')
+            })
+
+            const a4_width = 2100
+            const a4_height = 2970
+
+            $('#btn-gen').click(function () {
+                let canvas = $('#cvs-composite')[0]
+                let width = canvas.width = a4_width / 2
+                let height = canvas.height = a4_height / 2
+                let ctx = canvas.getContext('2d')
+
+                // 卡宽高计算
+                let card_width = width / 1.7
+                let card_height = height / 2 / 2
+
+                // 正面起始坐标
+                let f_x = (width - card_width) / 2
+                let f_y = (height / 2 - card_height) / 2
+
+                // 反面起始坐标
+                let b_x = (width - card_width) / 2
+                let b_y = (height / 2 - card_height) / 2 + (height / 2)
+
+                console.log(`正面起始坐标 x: ${f_x}, y: ${f_y}`)
+                console.log(`反面起始坐标 x: ${b_x}, y: ${b_y}`)
+                console.log(`卡宽度：${card_width}，卡高度：${card_height}`)
+
+                // 填充白色
+                ctx.fillStyle = '#fff'
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                // 画正反面
+                ctx.drawImage($('#cropped-img-front')[0], f_x, f_y, card_width, card_height);
+                ctx.drawImage($('#cropped-img-back')[0], b_x, b_y, card_width, card_height);
+            })
+
+            $('#btn-save-cvs').click(function () {
+                let canvas = $('#cvs-composite')[0]
+                let data = canvas.toDataURL('image/jpeg')
+                let a = $('#dl-img')
+                a.attr('href', data)
+                a.attr('download', '1.jpg')
+                a[0].click()
+            })
+
+            $('#btn-clean-cvs').click(function () {
+                let canvas = $('#cvs-composite')[0]
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+                // 重置宽高
+                canvas.width = 100
+                canvas.height = 100
+            })
+        })
+    </script>
+</head>
+<body>
+<p th:text="'hello ' + ${name} + '.'"></p>
+
+<div>
+    <span>选择身份证照片（5M 以下）：</span>
+    <input id="file-id-card" type="file"/><br/>
+    <select id="slt-side">
+        <option selected="selected" value="FRONT">正面</option>
+        <option value="BACK">反面</option>
+        <option value="BOTH">双面</option>
+    </select>
+    <button id="btn-up-idcard" type="button">上传识别并裁剪</button>
+
+    <br/>
+    <br/>
+    <div>
+        <span>识别结果：</span>
+        <button id="btn-clean-img">清除</button>
+        <img id="cropped-img-front" src="" alt=""/>
+        <img id="cropped-img-back" src="" alt=""/>
+    </div>
+</div>
+
+<div>
+    <span>合成效果展示区：</span>
+    <canvas id="cvs-composite" width="100" height="100"></canvas>
+    <br/>
+    <button id="btn-gen">合成</button>
+    <button id="btn-save-cvs">保存</button>
+    <button id="btn-clean-cvs">清除</button>
+    <a id='dl-img' href="" download="" hidden="hidden"></a>
+</div>
+
+</body>

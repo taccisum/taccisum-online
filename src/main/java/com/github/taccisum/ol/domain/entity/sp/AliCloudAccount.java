@@ -1,5 +1,9 @@
 package com.github.taccisum.ol.domain.entity.sp;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.PutObjectResult;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest;
@@ -7,14 +11,20 @@ import com.aliyuncs.dm.model.v20151123.SingleSendMailResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
+import com.aliyuncs.ocr.model.v20191230.RecognizeIdentityCardResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.github.taccisum.ol.domain.data.ThirdAccountDO;
 import com.github.taccisum.ol.domain.entity.core.ThirdAccount;
+import com.github.taccisum.ol.domain.exception.DataNotFoundException;
 import com.github.taccisum.ol.domain.exception.DomainException;
+import com.github.taccisum.ol.domain.repo.ThirdAccountRepo;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 
 /**
@@ -25,6 +35,9 @@ import java.util.Optional;
  */
 public class AliCloudAccount extends ThirdAccount {
     private IAcsClient client;
+    private OSS ossClient;
+    @Autowired
+    private ThirdAccountRepo thirdAccountRepo;
 
     public AliCloudAccount(Long id) {
         super(id);
@@ -97,11 +110,58 @@ public class AliCloudAccount extends ThirdAccount {
     }
 
     /**
+     * 获取阿里云 oss client
+     */
+    private OSS getOssClient(AliCloud.Region region) {
+        if (ossClient == null) {
+            String endpoint = region.getOssEndpoint();
+            ossClient = new OSSClientBuilder().build(endpoint, this.data().getAppId(), this.data().getAppSecret());
+        }
+        return ossClient;
+    }
+
+    /**
      * 获取主账号下的子账号实体
      *
      * @param name 子账号名称（用户名即可，示例：sub，会被识别为 sub@main_id.onaliyun.com）
      */
     public AliCloudAccount getSubAccount(String name) {
+        String mainAccount = this.data().getUsername();
+        DomainException ex = new DataNotFoundException(mainAccount + " 阿里云子账号", name);
+        ThirdAccount account = thirdAccountRepo.getByUsername(String.format("%s@%s.onaliyun.com", name, mainAccount))
+                .orElseThrow(() -> ex);
+
+        if (account instanceof AliCloudAccount) {
+            return (AliCloudAccount) account;
+        }
+        throw ex;
+    }
+
+    /**
+     * 上传文件到 oss
+     *
+     * @param is     输入流
+     * @param region 所属 region
+     * @param bucket 存储 bucket
+     * @param key    存储 key
+     */
+    public PutObjectResult upload(InputStream is, AliCloud.Region region, String bucket, String key) {
+        OSS client = this.getOssClient(region);
+        PutObjectRequest req;
+        if (is instanceof BufferedInputStream) {
+            req = new PutObjectRequest(bucket, key, is);
+        } else {
+            req = new PutObjectRequest(bucket, key, new BufferedInputStream(is));
+        }
+        return client.putObject(req);
+    }
+
+    /**
+     * 识别 id card
+     *
+     * @return
+     */
+    public IdCardAreas recognizeIdCardAreas() {
         throw new NotImplementedException();
     }
 
@@ -127,5 +187,11 @@ public class AliCloudAccount extends ThirdAccount {
         public MailSendException(ClientException cause) {
             super("MailSend", cause);
         }
+    }
+
+    @Data
+    public static class IdCardAreas {
+        private RecognizeIdentityCardResponse.Data.FrontResult.CardArea face;
+        private RecognizeIdentityCardResponse.Data.BackResult back;
     }
 }
