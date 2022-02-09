@@ -33,7 +33,7 @@ public class IdCardController {
     /**
      * 找出正反面区域并裁剪图片
      */
-    @Timed
+    @Timed(percentiles = {0.5, 0.95}, histogram = true)
     @PostMapping("crops")
     public String[] cropIdCard(@RequestBody MultipartFile file, @RequestParam Boolean fake, @RequestParam String side) throws IOException {
         if (Boolean.TRUE.equals(fake)) {
