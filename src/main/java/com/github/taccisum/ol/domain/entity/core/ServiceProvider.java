@@ -28,5 +28,9 @@ public interface ServiceProvider extends Entity<Type> {
          * 高德地图
          */
         AMAP,
+        /**
+         * Pigeon Service
+         */
+        PIGEON,
     }
 }

@@ -31,6 +31,8 @@ public class Factory implements com.github.taccisum.domain.core.Factory {
                 return new TencentCloud();
             case AMAP:
                 return new Amap();
+            case PIGEON:
+                return new Pigeon("http://120.25.107.93:8082");
             default:
                 throw new UnsupportedOperationException(id.name());
         }
@@ -44,6 +46,8 @@ public class Factory implements com.github.taccisum.domain.core.Factory {
                 return new TencentCloudAccount(id);
             case AMAP:
                 return new AmapAccount(id);
+            case PIGEON:
+                return new PigeonAccount(id);
             default:
                 throw new UnsupportedOperationException(spType.name());
         }
