@@ -6,10 +6,7 @@ import com.github.taccisum.ol.domain.entity.core.ServiceProvider;
 import com.github.taccisum.ol.domain.entity.core.ThirdAccount;
 import com.github.taccisum.ol.domain.entity.message.AliCloudMailMessage;
 import com.github.taccisum.ol.domain.entity.message.template.MailTemplate;
-import com.github.taccisum.ol.domain.entity.sp.AliCloud;
-import com.github.taccisum.ol.domain.entity.sp.AliCloudAccount;
-import com.github.taccisum.ol.domain.entity.sp.TencentCloud;
-import com.github.taccisum.ol.domain.entity.sp.TencentCloudAccount;
+import com.github.taccisum.ol.domain.entity.sp.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,6 +29,8 @@ public class Factory implements com.github.taccisum.domain.core.Factory {
                 return new AliCloud();
             case TENCENT_CLOUD:
                 return new TencentCloud();
+            case AMAP:
+                return new Amap();
             default:
                 throw new UnsupportedOperationException(id.name());
         }
@@ -43,6 +42,8 @@ public class Factory implements com.github.taccisum.domain.core.Factory {
                 return new AliCloudAccount(id);
             case TENCENT_CLOUD:
                 return new TencentCloudAccount(id);
+            case AMAP:
+                return new AmapAccount(id);
             default:
                 throw new UnsupportedOperationException(spType.name());
         }

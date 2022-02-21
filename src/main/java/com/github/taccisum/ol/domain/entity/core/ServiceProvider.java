@@ -24,5 +24,9 @@ public interface ServiceProvider extends Entity<Type> {
          * 腾讯云
          */
         TENCENT_CLOUD,
+        /**
+         * 高德地图
+         */
+        AMAP,
     }
 }
