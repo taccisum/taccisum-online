@@ -3,6 +3,7 @@ package com.github.taccisum.ol.domain.entity.message;
 import com.github.taccisum.ol.domain.entity.core.Message;
 import com.github.taccisum.ol.domain.entity.core.ServiceProvider;
 import com.github.taccisum.ol.domain.entity.core.sp.MailServiceProvider;
+import com.github.taccisum.ol.domain.entity.sp.Pigeon;
 import com.github.taccisum.ol.domain.exception.DataErrorException;
 import com.github.taccisum.ol.domain.repo.ServiceProviderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *
  * @author taccisum - liaojinfeng6938@dingtalk.com
  * @since 2021/12/30
+ * @deprecated use {@link Pigeon} instead
  */
 public class MailMessage extends Message {
     @Autowired

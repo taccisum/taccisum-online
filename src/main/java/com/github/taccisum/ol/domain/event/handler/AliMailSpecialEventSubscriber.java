@@ -1,6 +1,7 @@
 package com.github.taccisum.ol.domain.event.handler;
 
 import com.github.taccisum.ol.domain.entity.core.Message;
+import com.github.taccisum.ol.domain.entity.sp.Pigeon;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
  *
  * @author taccisum - liaojinfeng6938@dingtalk.com
  * @since 2021/12/31
+ * @deprecated use {@link Pigeon} instead
  */
 @Component
 public class AliMailSpecialEventSubscriber implements DomainEventSubscriber {

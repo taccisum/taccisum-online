@@ -4,6 +4,7 @@ import com.github.taccisum.ol.domain.data.MessageDO;
 import com.github.taccisum.ol.domain.entity.core.sp.MailServiceProvider;
 import com.github.taccisum.ol.domain.entity.sp.AliCloud;
 import com.github.taccisum.ol.domain.entity.sp.AliCloudAccount;
+import com.github.taccisum.ol.domain.entity.sp.Pigeon;
 import com.github.taccisum.ol.domain.exception.DataErrorException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +15,7 @@ import java.rmi.ServerException;
  *
  * @author taccisum - liaojinfeng6938@dingtalk.com
  * @since 2021/12/30
+ * @deprecated use {@link Pigeon} instead
  */
 @Slf4j
 public class AliCloudMailMessage extends MailMessage {
