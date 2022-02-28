@@ -27,11 +27,14 @@ jobs:
             docker run \
             -p $PORT:8080 \
             -v $HOST_LOG_PATH:/var/local/log \
+            -v /root/script:/usr/local/my_script \
             -d \
             --name $CONTAINER_NAME \
             $IMAGE_TAG \
               --spring.profiles.active=prod \
               --spring.datasource.password=${{ secrets.MYSQL_PASSWORD }}
+      - name: send email via pigeon
+        run: curl -X POST "http://120.25.107.93:8082/messages?sender=robot_01%40smtp.66cn.top&target=514162920%40qq.com&templateId=7"
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}

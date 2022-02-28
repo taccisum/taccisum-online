@@ -1,3 +1,7 @@
+app:
+  script:
+    gh-commit: /usr/local/my_script/gh_commit/1.sh
+
 logging:
   file:
     name: /var/local/log/app.log

@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>taccisum-online</artifactId>
-    <version>0.3.1.0</version>
+    <version>0.3.1.1</version>
 
     <dependencies>
         <dependency>
