@@ -1,16 +1,14 @@
 package com.github.taccisum.ol.controller.ljf;
 
 import com.github.taccisum.ol.config.ApplicationProperties;
+import com.github.taccisum.ol.domain.exception.DomainException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -29,7 +27,17 @@ public class ScriptController {
     @RequestMapping(value = "gh_commit", method = {RequestMethod.GET, RequestMethod.POST})
     public void executeGhCommit() {
         try {
-            Process process = Runtime.getRuntime().exec(properties.getScript().getGhCommit());
+            String scriptPath = properties.getScript().getGhCommit();
+            File script = new File(scriptPath);
+            if (!script.exists()) {
+                throw new DomainException("script %s not exists.", script);
+            }
+
+            if (!script.canExecute()) {
+                throw new DomainException("script %s can not be execute.", script);
+            }
+
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", scriptPath});
 
             CompletableFuture.runAsync(() -> {
                 try {
