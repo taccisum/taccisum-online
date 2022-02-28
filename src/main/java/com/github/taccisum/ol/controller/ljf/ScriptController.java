@@ -2,8 +2,8 @@ package com.github.taccisum.ol.controller.ljf;
 
 import com.github.taccisum.ol.config.ApplicationProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,7 +26,7 @@ public class ScriptController {
     @Resource
     private ApplicationProperties properties;
 
-    @PostMapping("gh_commit")
+    @RequestMapping(value = "gh_commit", method = {RequestMethod.GET, RequestMethod.POST})
     public void executeGhCommit() {
         try {
             Process process = Runtime.getRuntime().exec(properties.getScript().getGhCommit());

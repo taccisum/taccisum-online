@@ -1,6 +1,6 @@
 app:
   script:
-    gh-commit: /usr/local/my_script/gh_commit/1.sh
+    gh-commit: /usr/local/my_script/gh_commits/1.sh
 
 logging:
   file:
