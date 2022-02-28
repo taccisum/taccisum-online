@@ -5,6 +5,7 @@ import com.github.taccisum.ol.domain.entity.sp.Pigeon;
 import com.github.taccisum.ol.domain.repo.ServiceProviderRepo;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
  * @since 2022/2/28
  */
 @Component
+@Profile("prod")
 public class SendNoticeListener {
     @Resource
     private ServiceProviderRepo serviceProviderRepo;
