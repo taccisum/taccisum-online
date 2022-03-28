@@ -5,6 +5,7 @@ import com.github.taccisum.ol.domain.entity.Script;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,7 +27,11 @@ public class ScriptController {
     private ApplicationProperties properties;
 
     @RequestMapping(value = "gh_commit", method = {RequestMethod.GET, RequestMethod.POST})
-    public String executeGhCommit() {
+    public String executeGhCommit(@RequestParam(required = false) Boolean force) {
+        if (force) {
+            setIdle();
+        }
+
         if (!setBusy()) {
             return "Running";
         }
