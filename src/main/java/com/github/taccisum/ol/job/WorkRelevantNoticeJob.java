@@ -44,7 +44,7 @@ public class WorkRelevantNoticeJob {
         } else if (cast.getDayWeather().contains("雨")) {
             serviceProviderRepo.<Pigeon>getAndCast(ServiceProvider.Type.PIGEON)
                     .getAccount()
-                    .sendTemplateMessage(4, "514162920@qq.com", "taccisum-online");
+                    .sendTemplateMessage(4, "514162920@qq.com", "robot_01@smtp.66cn.top");
         }
     }
 }

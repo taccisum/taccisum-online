@@ -32,9 +32,12 @@ public class PigeonAccount extends ThirdAccount {
     public void sendTemplateMessage(int templateId, String target, String sender) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("template_id", templateId);
-        params.put("target", target);
-        params.put("sender", sender);
-        Long msgId = restTemplate.postForEntity(this.getInstance().getUrl() + "/messages?templateId={template_id}&target={target}", null, Long.class, params)
+
+        HashMap<String, Object> body = new HashMap<>();
+
+        body.put("target", target);
+        body.put("sender", sender);
+        Long msgId = restTemplate.postForEntity(this.getInstance().getUrl() + "/messages?templateId={template_id}", body, Long.class, params)
                 .getBody();
     }
 
