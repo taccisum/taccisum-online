@@ -27,7 +27,7 @@ public class ScriptController {
     private ApplicationProperties properties;
 
     @RequestMapping(value = "gh_commit", method = {RequestMethod.GET, RequestMethod.POST})
-    public String executeGhCommit(@RequestParam(required = false) Boolean force) {
+    public String executeGhCommit(@RequestParam(required = false, defaultValue = "false") boolean force) {
         if (force) {
             setIdle();
         }
@@ -67,6 +67,9 @@ public class ScriptController {
         } catch (Script.ScriptRunException e) {
             setIdle();
             return "Run script fail: " + e.getMessage();
+        } catch (Exception e) {
+            setIdle();
+            return "Run script error: " + e.getMessage();
         }
     }
 
