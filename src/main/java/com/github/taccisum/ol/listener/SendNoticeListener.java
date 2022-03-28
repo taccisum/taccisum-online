@@ -26,20 +26,20 @@ public class SendNoticeListener {
     public void onStarted(ApplicationStartedEvent e) {
         serviceProviderRepo.<Pigeon>getAndCast(ServiceProvider.Type.PIGEON)
                 .getAccount()
-                .sendTemplateMessage(7, "514162920@qq.com", "taccisum-online");
+                .sendTemplateMessage(7, "514162920@qq.com", "robot_01@smtp.66cn.top");
     }
 
     @EventListener(ApplicationFailedEvent.class)
     public void onFailed(ApplicationFailedEvent e) {
         serviceProviderRepo.<Pigeon>getAndCast(ServiceProvider.Type.PIGEON)
                 .getAccount()
-                .sendTemplateMessage(8, "514162920@qq.com", "taccisum-online");
+                .sendTemplateMessage(8, "514162920@qq.com", "robot_01@smtp.66cn.top");
     }
 
     @PreDestroy
     public void onExit() {
         serviceProviderRepo.<Pigeon>getAndCast(ServiceProvider.Type.PIGEON)
                 .getAccount()
-                .sendTemplateMessage(9, "514162920@qq.com", "taccisum-online");
+                .sendTemplateMessage(9, "514162920@qq.com", "robot_01@smtp.66cn.top");
     }
 }
