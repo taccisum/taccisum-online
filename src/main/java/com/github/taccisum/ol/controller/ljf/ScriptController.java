@@ -1,16 +1,17 @@
 package com.github.taccisum.ol.controller.ljf;
 
 import com.github.taccisum.ol.config.ApplicationProperties;
-import com.github.taccisum.ol.domain.exception.DomainException;
+import com.github.taccisum.ol.domain.entity.Script;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -25,42 +26,61 @@ public class ScriptController {
     private ApplicationProperties properties;
 
     @RequestMapping(value = "gh_commit", method = {RequestMethod.GET, RequestMethod.POST})
-    public void executeGhCommit() {
+    public String executeGhCommit() {
+        if (!setBusy()) {
+            return "Running";
+        }
+
         try {
-            String scriptPath = properties.getScript().getGhCommit();
-            File script = new File(scriptPath);
-            if (!script.exists()) {
-                throw new DomainException("script %s not exists.", script);
-            }
+            Script script = new Script.FilePath(properties.getScript().getGhCommit());
 
-            if (!script.canExecute()) {
-                throw new DomainException("script %s can not be execute.", script);
-            }
+            script.runAsync(proc -> {
+                InputStream is = proc.getInputStream();
+                InputStream err = proc.getErrorStream();
 
-            Process process = Runtime.getRuntime().exec(new String[]{"sh", scriptPath});
-
-            CompletableFuture.runAsync(() -> {
+                int exitVal = 0;
                 try {
-                    InputStream is = process.getInputStream();
-                    InputStream err = process.getErrorStream();
-
-                    int exitVal = process.waitFor();
-
-                    BufferedReader isReader = new BufferedReader(new InputStreamReader(is));
-                    List<String> stdout = isReader.lines().collect(Collectors.toList());
-                    log.info("stdout: {}", stdout);
-
-                    if (exitVal != 0) {
-                        BufferedReader errReader = new BufferedReader(new InputStreamReader(err));
-                        List<String> stderr = errReader.lines().collect(Collectors.toList());
-                        log.warn("stderr: {}", stderr);
-                    }
+                    exitVal = proc.waitFor();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+                BufferedReader isReader = new BufferedReader(new InputStreamReader(is));
+                List<String> stdout = isReader.lines().collect(Collectors.toList());
+                log.info("stdout: {}", stdout);
+
+                if (exitVal != 0) {
+                    BufferedReader errReader = new BufferedReader(new InputStreamReader(err));
+                    List<String> stderr = errReader.lines().collect(Collectors.toList());
+                    log.warn("stderr: {}", stderr);
+                }
+
+                setIdle();
             });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            return "Start Run...";
+        } catch (Script.ScriptRunException e) {
+            setIdle();
+            return "Run script fail: " + e.getMessage();
+        }
+    }
+
+    private static final Object LOCK = new Object();
+    private static volatile boolean isRunning = false;
+
+    private static boolean setBusy() {
+        synchronized (LOCK) {
+            if (isRunning) {
+                return false;
+            }
+            isRunning = true;
+            return true;
+        }
+    }
+
+    private static void setIdle() {
+        synchronized (LOCK) {
+            isRunning = false;
         }
     }
 }
