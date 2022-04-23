@@ -11,7 +11,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:mysql://rm-wz9g15ih656rg6zvu.mysql.rds.aliyuncs.com:3306/taccisum-online-dev
+    url: jdbc:mysql://66cn.top:13306/taccisum-online
     username: root
 
 management:
